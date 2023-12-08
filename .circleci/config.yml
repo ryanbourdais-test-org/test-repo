@@ -10,7 +10,7 @@ jobs:
       - image: cimg/android:2023.10.2-ndk
     macos:
       xcode: "14.2.0"
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.x86.medium
     steps:
       - checkout
       - setup_remote_docker:
