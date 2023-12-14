@@ -26,7 +26,7 @@ jobs:
 
   flutter-2204-test:
     machine:
-      image: ubuntu-2204:2023.08.1
+      image: ubuntu-2204:2022.08.1
     steps:
       - checkout
       - run: wget -P ./flank https://github.com/Flank/flank/releases/download/v23.07.0/flank.jar
@@ -46,7 +46,7 @@ jobs:
   flutter-2004-test:
     executor: 
       name: win/server-2022
-      version: 2023.08.1
+      version: 2022.07.1
     steps:
       - checkout
       - run: echo 'export STR="string"' >> "$BASH_ENV"
@@ -62,7 +62,7 @@ jobs:
 
   flutter-build:
     machine:
-      image: android:2023.11.1
+      image: android:2022.07.1
     steps:
       - checkout
       - run: wget -P ./flank https://github.com/Flank/flank/releases/download/v23.07.0/flank.jar
@@ -96,14 +96,14 @@ jobs:
           path: testdata
   firebase-cli:
     machine:
-      image: android:2023.08.1
+      image: android:2022.07.1
     steps:
       - checkout
       - run: curl -sL https://firebase.tools | bash
 
   windows_env:
     machine:
-      image: windows-server-2019-vs2019:2023.10.1
+      image: windows-server-2019-vs2019:2022.07.1
       resource_class: windows.medium
     steps:
       - run: 
