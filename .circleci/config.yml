@@ -11,12 +11,12 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          version: current
       - run: ruby -v
-      - run: echo 'export STR="string"' >> "$BASH_ENV"
+      - run: echo \'export STR="string"\' >> "$BASH_ENV"
       - android/run-tests:
           max-tries: 1
-          pre-test-command: "echo $STR"
+          pre-test-command: echo $STR
       - flutter/install_sdk:
           version: 3.7.3
       - run: flutter test -r json > report.json
@@ -31,28 +31,28 @@ jobs:
       - checkout
       - run: wget -P ./flank https://github.com/Flank/flank/releases/download/v23.07.0/flank.jar
       - run: echo "java -jar flank.jar $@" > ./flank/flank.sh
-      - run: echo alias flank="'sh ./flank/flank.sh'" >> ${CIRCLECI_HOME}/.circlerc
+      - run: echo alias flank="\'sh ./flank/flank.sh\'" >> ${CIRCLECI_HOME}/.circlerc
       - run: flank
       - android/run-tests:
           max-tries: 1
-          pre-test-command: "echo $STR"
+          pre-test-command: echo $STR
       - flutter/install_sdk:
           version: 3.7.3
       - run: flutter test -r json > report.json
       - run: flutter analyze
       - store_artifacts:
           path: report.json
-  
+
   flutter-2004-test:
-    executor: 
+    executor:
       name: win/server-2022
       version: 2022.07.1
     steps:
       - checkout
-      - run: echo 'export STR="string"' >> "$BASH_ENV"
+      - run: echo \'export STR="string"\' >> "$BASH_ENV"
       - android/run-tests:
           max-tries: 1
-          pre-test-command: "echo $STR"
+          pre-test-command: echo $STR
       - flutter/install_sdk:
           version: 3.7.3
       - run: flutter test -r json > report.json
@@ -62,16 +62,16 @@ jobs:
 
   flutter-build:
     machine:
-      image: android:2022.07.1
+      image: android:current
     steps:
       - checkout
       - run: wget -P ./flank https://github.com/Flank/flank/releases/download/v23.07.0/flank.jar
       - run: echo "java -jar ./flank/flank.jar $@" > ./flank/flank.sh
-      - run: 
+      - run:
           name: test flank
           command: $flank
           environment:
-            flank: 'sh ./flank/flank.sh'
+            flank: \'sh ./flank/flank.sh\'
       - flutter/install_sdk_and_pub:
           version: 3.7.3
       # - run: flutter build apk
@@ -84,19 +84,19 @@ jobs:
           post-emulator-wait-steps:
             - run: echo "emulator running"
           post-emulator-launch-assemble-command: adb pull data .
-          post-run-tests-steps: 
+          post-run-tests-steps:
             - run: echo "run test done"
             - run: mkdir testdata
             - run: adb pull storage .
-          additional-avd-args: "-d pixel_3a -c 1G"
-          additional-emulator-args: "-memory 4096 -cores 3 -writable-system"
+          additional-avd-args: -d pixel_3a -c 1G
+          additional-emulator-args: -memory 4096 -cores 3 -writable-system
       - store_artifacts:
           path: build
       - store_artifacts:
           path: testdata
   firebase-cli:
     machine:
-      image: android:2022.07.1
+      image: android:current
     steps:
       - checkout
       - run: curl -sL https://firebase.tools | bash
@@ -106,19 +106,19 @@ jobs:
       image: windows-server-2019-vs2019:2022.07.1
       resource_class: windows.medium
     steps:
-      - run: 
+      - run:
           command: setx testvar "testing1"
           shell: powershell.exe
-      - run: 
+      - run:
           command: (Get-ChildItem env:)
           shell: powershell.exe
-      - run: 
-          command: SetEnvironmentVariable("testvar2", "testing2", 'Machine')
+      - run:
+          command: SetEnvironmentVariable("testvar2", "testing2", \'Machine\')
           shell: powershell.exe
-      - run: 
+      - run:
           command: $env:testvar2
           shell: powershell.exe
-          
+
   verifydefault:
     parameters:
       xcodev:
@@ -127,8 +127,8 @@ jobs:
       xcode: << parameters.xcodev >>
     resource_class: macos.m1.large.gen1
     steps:
-        - run: xcodebuild -version
-        
+      - run: xcodebuild -version
+
   verifydefault_intel:
     parameters:
       xcodev:
@@ -137,4 +137,4 @@ jobs:
       xcode: << parameters.xcodev >>
     resource_class: macos.x86.medium.gen2
     steps:
-        - run: xcodebuild -version
+      - run: xcodebuild -version
